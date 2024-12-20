@@ -1,0 +1,100 @@
+#Configuracao do Server
+logging:
+  pattern:
+    console: "[%d{yyyy-MM-dd HH:mm:ss}] [X-ReqID=%X{CorrelationId}] [%-5level] [%logger{70}] - %msg%n"
+
+cors:
+  origins: ${CORS_ORIGINS:http://localhost:5173,http://localhost:3000}
+
+springdoc:
+  api-docs:
+    path: "/api-docs"
+
+spring:
+  main:
+    banner-mode: "CONSOLE"   # por algum motivo tem que ser entre aspas duplas
+    allow-bean-definition-overriding: true
+  data:
+    mongodb:
+      uri: mongodb://root:MongoDB2019!@localhost:27017/gaston?authSource=admin
+  jpa:
+    show-sql: false
+    generate-ddl: false
+    hibernate:
+      temp:
+        use_jdbc_metadata_defaults: false
+      ddl-auto: update
+
+    open-in-view: false
+    defer-datasource-initialization: always
+    task:
+    scheduling:
+      pool:
+        size: 10
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
+          minPoolSize: 5
+          time_zone: America/Sao_Paulo
+        timezone:
+          default_storage: NORMALIZE_UTC
+  redis:
+    host: host.docker.internal         # Endereço do servidor Redis
+    port: 6379              # Porta do Redis
+    ##password: root123 # Senha (se configurada, caso contrário remova esta linha)
+    #password: root123 # Senha (se configurada, caso contrário remova esta linha)
+    timeout: 2000ms         # Timeout para conexão
+    database: 0             # Banco de dados Redis (padrão é 0)
+    # Pool de conexões (opcional)
+    lettuce:
+      pool:
+        max-active: 8       # Máximo de conexões ativas
+        max-idle: 8         # Máximo de conexões ociosas
+        min-idle: 0         # Mínimo de conexões ociosas
+      shutdown-timeout: 100ms # Timeout para encerrar conexões
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: gaston
+    password: gaston123
+    virtual-host: /
+    listener:
+      simple:
+        default-requeue-rejected: false
+
+  datasource:
+    url: jdbc:postgresql://${SPRING_DATABASE:localhost}:5432/db_gaston
+    driverClassName: org.postgresql.Driver
+    username: root
+    password: root
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      pool-name: gaston
+      maximum-pool-size: 20
+      max-lifetime: 1800000
+      idle-timeout: 30000
+    tomcat:
+      initial-size: 5
+      max-wait: 20000
+      max-active: 50
+      max-idle: 15
+      min-idle: 8
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"  # Expor todos os endpoints do Actuator
+  endpoint:
+    health:
+      show-details: always  # Exibe detalhes completos do estado da aplicação
+    info:
+      enabled: true         # Habilita o endpoint de informações
+  info:
+    app:
+      name: Gaston App
+      description: API de controle de vendas e estoque
+      version: 1.0.0

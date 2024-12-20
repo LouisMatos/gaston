@@ -1,0 +1,122 @@
+version: '3'
+
+services:
+
+  postgres:
+    image: postgres:latest
+    container_name: db_postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=db_gaston
+    ports:
+      - "5432:5432"
+    networks:
+      - network_postgres
+    volumes:
+      - gaston:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: web_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "gaston@tech.com"
+      PGADMIN_DEFAULT_PASSWORD: "gaston123"
+    ports:
+      - "54321:80"
+    networks:
+      - network_postgres
+    depends_on:
+      - postgres
+    deploy:
+      resources:
+        limits:
+          cpus: '0.15'
+          memory: 128M
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: gaston
+      RABBITMQ_DEFAULT_PASS: gaston123
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 256M
+
+  mongo-express:
+    image: mongo-express
+    depends_on:
+      - mongo
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: gaston
+      ME_CONFIG_BASICAUTH_PASSWORD: MongoExpress2019!
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: MongoDB2019!
+      ME_CONFIG_MONGODB_SERVER: mongo
+    links:
+      - mongo
+    networks:
+      - mongo-compose-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 256M
+
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: MongoDB2019!
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-volume:/data/db
+    networks:
+      - mongo-compose-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 256M
+
+
+  redis:
+    image: redis:latest       # Imagem oficial do Redis
+    container_name: redis     # Nome do container
+    ports:
+      - "6379:6379"           # Porta exposta
+    volumes:
+      - redis-data:/data      # Volume persistente para os dados
+    restart: always           # Reinicia o container em caso de falha
+
+volumes:
+  gaston:
+    driver: local
+  mongo-volume:
+     driver: local
+  redis-data:
+    driver: local
+
+networks:
+  network_service:
+    driver: bridge
+  network_postgres:
+    driver: bridge
+  mongo-compose-network:
+    driver: bridge

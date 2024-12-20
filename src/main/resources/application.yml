@@ -1,0 +1,23 @@
+server:
+  port: 8091
+  forward-headers-strategy: native
+  use-forward-headers: true
+
+spring:
+  profiles:
+    active: ${APP_PROFILE:dev}
+  devtools:
+    add-properties: false
+  main:
+    allow-circular-references: true
+
+
+management:
+  security:
+    enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  health:
+    show-details: always
