@@ -11,20 +11,21 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class MdcInterceptor implements HandlerInterceptor {
 
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-            throws Exception {
-        MDC.put("X-ReqId", getXReqId());
-        return true;
-    }
+  @Override
+  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+      throws Exception {
+    MDC.put("X-ReqId", getXReqId());
+    return true;
+  }
 
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex)
-            throws Exception {
-        MDC.remove("X-ReqId");
-    }
+  @Override
+  public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
+      Object handler, @Nullable Exception ex)
+      throws Exception {
+    MDC.remove("X-ReqId");
+  }
 
-    private String getXReqId() {
-        return UUID.randomUUID().toString().replace("-", "");
-    }
+  private String getXReqId() {
+    return UUID.randomUUID().toString().replace("-", "");
+  }
 }

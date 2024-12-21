@@ -9,40 +9,41 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/produtos")
+@RequestMapping("/api/produtos")
 public class ProdutoController {
 
-    private final ProdutoServiceImpl produtoService;
+  private final ProdutoServiceImpl produtoService;
 
-    public ProdutoController(ProdutoServiceImpl produtoService) {
-        this.produtoService = produtoService;
-    }
+  public ProdutoController(ProdutoServiceImpl produtoService) {
+    this.produtoService = produtoService;
+  }
 
-    @PostMapping
-    public ResponseEntity<Produto> criarProduto(@RequestBody Produto produto) {
-        return ResponseEntity.ok(produtoService.criarProduto(produto));
-    }
+  @PostMapping
+  public ResponseEntity<Produto> criarProduto(@RequestBody Produto produto) {
+    return ResponseEntity.ok(produtoService.criarProduto(produto));
+  }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Produto> buscarProdutoPorId(@PathVariable Long id) {
-        return produtoService.buscarPorId(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
+  @GetMapping("/{id}")
+  public ResponseEntity<Produto> buscarProdutoPorId(@PathVariable Long id) {
+    return produtoService.buscarPorId(id)
+        .map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
+  }
 
-    @GetMapping
-    public ResponseEntity<List<Produto>> listarProdutos() {
-        return ResponseEntity.ok(produtoService.listarTodos());
-    }
+  @GetMapping
+  public ResponseEntity<List<Produto>> listarProdutos() {
+    return ResponseEntity.ok(produtoService.listarTodos());
+  }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Produto> atualizarProduto(@PathVariable Long id, @RequestBody Produto produto) {
-        return ResponseEntity.ok(produtoService.atualizarProduto(id, produto));
-    }
+  @PutMapping("/{id}")
+  public ResponseEntity<Produto> atualizarProduto(@PathVariable Long id,
+      @RequestBody Produto produto) {
+    return ResponseEntity.ok(produtoService.atualizarProduto(id, produto));
+  }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarProduto(@PathVariable Long id) {
-        produtoService.deletarProduto(id);
-        return ResponseEntity.noContent().build();
-    }
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> deletarProduto(@PathVariable Long id) {
+    produtoService.deletarProduto(id);
+    return ResponseEntity.noContent().build();
+  }
 }

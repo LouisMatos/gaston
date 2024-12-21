@@ -19,7 +19,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
+          cpus: '0.5'
           memory: 512M
 
   pgadmin:
@@ -104,6 +104,11 @@ services:
     volumes:
       - redis-data:/data      # Volume persistente para os dados
     restart: always           # Reinicia o container em caso de falha
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 256M
 
 volumes:
   gaston:
