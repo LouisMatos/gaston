@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @EnableJpaRepositories
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = { "br.com.matos.gaston"})
 public class GastonApplication {
 
   public static void main(String[] args) {

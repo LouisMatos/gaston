@@ -1,20 +1,14 @@
 package br.com.matos.gaston.domain.usecases;
 
 
-import br.com.matos.gaston.domain.entities.Produto;
-
+import br.com.matos.gaston.application.dtos.ProdutoDTO;
 import java.util.List;
 import java.util.Optional;
 
 public interface ProdutoService {
-
-  Produto criarProduto(Produto produto);
-
-  Optional<Produto> buscarPorId(Long id);
-
-  List<Produto> listarTodos();
-
-  Produto atualizarProduto(Long id, Produto produto);
-
+  ProdutoDTO criarProduto(ProdutoDTO produtoDTO);
+  Optional<ProdutoDTO> buscarPorId(Long id);
+  List<ProdutoDTO> listarTodos();
+  ProdutoDTO atualizarProduto(Long id, ProdutoDTO produtoDTO);
   void deletarProduto(Long id);
 }
